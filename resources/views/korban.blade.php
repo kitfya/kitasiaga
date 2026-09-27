@@ -25,6 +25,7 @@
             </div>
         </div>
 
+        <!-- Summary Cards -->
         <div class="grid grid-cols-2 sm:grid-cols-5 gap-3 no-print">
             <div class="p-3.5 bg-white border border-neutral-200 rounded-lg shadow-xs">
                 <span class="text-[11px] font-medium text-neutral-500 block">Total Pengungsi</span>
@@ -48,6 +49,7 @@
             </div>
         </div>
 
+        <!-- Filter Form -->
         <form method="GET" action="{{ route('korban.index') }}" class="bg-white border border-neutral-200 rounded-lg p-4 shadow-xs space-y-3 no-print">
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
                 <div class="lg:col-span-2">
@@ -97,6 +99,7 @@
             </div>
         </form>
 
+        <!-- Table Manifest -->
         <section class="bg-white border border-neutral-200 rounded-lg shadow-xs overflow-hidden print-area">
             <div class="px-5 py-3 border-b border-neutral-200 flex items-center justify-between bg-neutral-50/70">
                 <div class="flex items-center gap-2">
@@ -142,8 +145,8 @@
                                             {{ $v->kelompok_rentan === 'Lansia' ? 'text-blue-700 bg-blue-50 border-blue-200 font-medium' : '' }}
                                             {{ $v->kelompok_rentan === 'Hamil' ? 'text-pink-700 bg-pink-50 border-pink-200 font-medium' : '' }}
                                             {{ $v->kelompok_rentan === 'Disabilitas' ? 'text-orange-700 bg-orange-50 border-orange-200 font-medium' : '' }}
-                                            {{ $v->kelompok_rentan === 'None' ? 'text-neutral-500 bg-neutral-100 border-neutral-200' : '' }}">
-                                            {{ $v->kelompok_rentan === 'None' ? 'Umum' :$v->kelompok_rentan }}
+                                            {{ in_array($v->kelompok_rentan, ['None', 'Umum']) ? 'text-neutral-500 bg-neutral-100 border-neutral-200' : '' }}">
+                                            {{ in_array($v->kelompok_rentan, ['None', 'Umum']) ? 'Umum' :$v->kelompok_rentan }}
                                         </span>
                                     </td>
                                     <td class="px-4 py-3 whitespace-nowrap">
@@ -166,7 +169,7 @@
                                         <div class="inline-flex items-center gap-1.5">
                                             <button type="button" @click="openEditModal({
                                                 id: '{{ $v->id }}',
-                                                nama: '{{ e($v->name) }}',
+                                                name: '{{ e($v->name) }}',
                                                 usia: '{{ $v->usia }}',
                                                 nik: '{{ $v->nik }}',
                                                 posko_id: '{{ $v->posko_id }}',
@@ -196,6 +199,7 @@
             </div>
         </section>
 
+        <!-- Form Modal (Create / Edit) -->
         <div x-show="isFormModalOpen" 
              x-transition.opacity.duration.200ms
              @keydown.escape.window="isFormModalOpen = false"
@@ -228,7 +232,7 @@
                             <label class="block text-xs font-medium text-neutral-700 mb-1">Laporan Bencana Terkait <span class="text-red-600">*</span></label>
                             <select name="laporan_id" x-model="formData.laporan_id" required class="w-full border border-neutral-300 rounded-md px-3 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-red-600 bg-white">
                                 <option value="">-- Pilih Laporan --</option>
-                                @foreach($laporanList as $lap)
+                                @foreach($laporanList as$lap)
                                     <option value="{{ $lap->id }}">{{ $lap->id }} - {{$lap->tipe }}</option>
                                 @endforeach
                             </select>
@@ -237,7 +241,7 @@
                             <label class="block text-xs font-medium text-neutral-700 mb-1">Posko Penampungan <span class="text-red-600">*</span></label>
                             <select name="posko_id" x-model="formData.posko_id" required class="w-full border border-neutral-300 rounded-md px-3 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-red-600 bg-white">
                                 <option value="">-- Pilih Posko --</option>
-                                @foreach($poskoList as $p)
+                                @foreach($poskoList as$p)
                                     <option value="{{ $p->id }}">{{ $p->name }}</option>
                                 @endforeach
                             </select>
@@ -247,7 +251,8 @@
                     <div class="grid grid-cols-1 sm:grid-cols-12 gap-3">
                         <div class="sm:col-span-8">
                             <label class="block text-xs font-medium text-neutral-700 mb-1">Nama Lengkap Korban <span class="text-red-600">*</span></label>
-                            <input type="text" name="nama" x-model="formData.nama" required placeholder="Contoh: Siti Rahmah" class="w-full border border-neutral-300 rounded-md px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-red-600">
+                            <!-- PENTING: Diberi name="name" agar cocok dengan Controller & Database -->
+                            <input type="text" name="name" x-model="formData.name" required placeholder="Contoh: Siti Rahmah" class="w-full border border-neutral-300 rounded-md px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-red-600">
                         </div>
                         <div class="sm:col-span-4">
                             <label class="block text-xs font-medium text-neutral-700 mb-1">Usia (Tahun) <span class="text-red-600">*</span></label>
@@ -298,6 +303,7 @@
             </div>
         </div>
 
+        <!-- Delete Modal -->
         <div x-show="isDeleteModalOpen" 
              x-transition.opacity.duration.200ms
              @keydown.escape.window="isDeleteModalOpen = false"
@@ -347,7 +353,7 @@
             formData: {
                 laporan_id: '',
                 posko_id: '{{ $poskoRelawan?->id ?? "" }}',
-                nama: '',
+                name: '',
                 usia: '',
                 nik: '',
                 kondisi: 'Sehat',
@@ -360,9 +366,8 @@
                 this.formAction = '{{ route("korban.store") }}';
                 this.formData = {
                     laporan_id: '',
-                    // Menggunakan String(...) agar tipe data cocok dengan value option HTML
                     posko_id: '{{ $poskoRelawan?->id ?? "" }}',
-                    nama: '',
+                    name: '',
                     usia: '',
                     nik: '',
                     kondisi: 'Sehat',
@@ -378,7 +383,7 @@
                 this.formData = {
                     laporan_id: String(data.laporan_id ?? ''),
                     posko_id: String(data.posko_id ?? ''),
-                    nama: data.nama,
+                    name: data.name,
                     usia: data.usia,
                     nik: data.nik !== 'null' && data.nik ? data.nik : '',
                     kondisi: data.kondisi,
@@ -388,9 +393,9 @@
                 this.isFormModalOpen = true;
             },
 
-            openDeleteModal(id, nama) {
+            openDeleteModal(id, name) {
                 this.deleteAction = `/korban/${id}`;
-                this.deleteTargetName = nama;
+                this.deleteTargetName = name;
                 this.isDeleteModalOpen = true;
             },
 
@@ -402,14 +407,14 @@
                     const cols = row.querySelectorAll('td');
                     if (cols.length > 1) {
                         const id = cols[0].innerText.trim();
-                        const nama = cols[1].querySelector('div').innerText.trim();
+                        const name = cols[1].querySelector('div').innerText.trim();
                         const nikText = cols[1].querySelector('.font-mono').innerText.replace('NIK:', '').trim();
                         const usia = cols[2].innerText.trim();
                         const rentan = cols[3].innerText.trim();
                         const kondisi = cols[4].innerText.trim();
                         const kebutuhan = cols[5].querySelector('.line-clamp-1').innerText.trim();
 
-                        csv += `"${id}","${nama}","${nikText}","${usia}","${rentan}","${kondisi}","${kebutuhan}"\n`;
+                        csv += `"${id}","${name}","${nikText}","${usia}","${rentan}","${kondisi}","${kebutuhan}"\n`;
                     }
                 });
 
@@ -424,7 +429,7 @@
             }
         }));
     });
-</script>
+    </script>
 
     <style>
         [x-cloak] { display: none !important; }
