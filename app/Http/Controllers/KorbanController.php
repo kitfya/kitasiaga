@@ -7,6 +7,7 @@ use App\Models\Laporan;
 use App\Models\Posko;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class KorbanController extends Controller
 {
@@ -17,7 +18,6 @@ class KorbanController extends Controller
 
         $query = Korban::with(['posko', 'laporan']);
 
-        // 1. Pencarian (Sudah diubah dari 'nama' menjadi 'name')
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function ($q) use ($search) {
@@ -28,30 +28,26 @@ class KorbanController extends Controller
             });
         }
 
-        // Filter Posko
         if ($request->filled('posko_id') && $request->posko_id !== 'all') {
             $query->where('posko_id', $request->posko_id);
         }
 
-        // Filter Kondisi
         if ($request->filled('kondisi') && $request->kondisi !== 'all') {
-            $query->where('kondisi', $request->kondisi);
+            $query->where('kondisi', strtolower($request->kondisi));
         }
 
-        // Filter Kelompok Rentan
         if ($request->filled('kelompok_rentan') && $request->kelompok_rentan !== 'all') {
-            $query->where('kelompok_rentan', $request->kelompok_rentan);
+            $query->where('kelompok_rentan', strtolower($request->kelompok_rentan));
         }
 
         $victims = $query->latest()->get();
 
-        // 2. Summary langsung dari Database (Jauh lebih cepat & efisien)
         $summary = [
-            'total' => Korban::count(),
-            'kritis' => Korban::where('kondisi', 'Kritis')->count(),
-            'luka' => Korban::where('kondisi', 'Luka-luka')->count(),
-            'sehat' => Korban::where('kondisi', 'Sehat')->count(),
-            'rentan' => Korban::whereIn('kelompok_rentan', ['Bayi/Balita', 'Lansia', 'Hamil', 'Disabilitas'])->count(),
+            'total'  => Korban::count(),
+            'kritis' => Korban::where('kondisi', 'kritis')->count(),
+            'luka'   => Korban::where('kondisi', 'luka')->count(),
+            'sehat'  => Korban::where('kondisi', 'sehat')->count(),
+            'rentan' => Korban::whereIn('kelompok_rentan', ['bayi', 'lansia', 'hamil', 'disabilitas'])->count(),
         ];
 
         $poskoList = Posko::all();
@@ -69,19 +65,18 @@ class KorbanController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'laporan_id' => 'required|exists:laporans,id', // Tambahkan exists
-            'posko_id' => 'required|exists:poskos,id',
-            'name' => 'required|string|max:255',
-            'usia' => 'required|numeric|min:0|max:120',
-            'nik' => 'nullable|string|max:16',
-            'kondisi' => 'required|string',
-            'kelompok_rentan' => 'required|string',
-            'kebutuhan' => 'nullable|string',
+            'laporan_id'      => 'required|exists:laporans,id',
+            'posko_id'        => 'required|exists:poskos,id',
+            'name'            => 'required|string|max:255',
+            'usia'            => 'required|numeric|min:0|max:120',
+            'nik'             => 'nullable|string|max:16',
+            'kondisi'         => ['required', Rule::in(['sehat', 'luka', 'kritis'])],
+            'kelompok_rentan' => ['nullable', Rule::in(['hamil', 'bayi', 'lansia', 'disabilitas'])],
+            'kebutuhan'       => 'nullable|string',
         ]);
 
         Korban::create($validated);
 
-        // Tambah pengungsi di posko terkait
         Posko::where('id', $request->posko_id)->increment('jumlah_pengungsi');
 
         return redirect()->back()->with('success', 'Data korban berhasil ditambahkan.');
@@ -90,14 +85,14 @@ class KorbanController extends Controller
     public function update(Request $request, Korban $korban)
     {
         $validated = $request->validate([
-            'laporan_id' => 'required|exists:laporans,id', // Tambahkan exists
-            'posko_id' => 'required|exists:poskos,id',
-            'name' => 'required|string|max:255',
-            'usia' => 'required|numeric|min:0|max:120',
-            'nik' => 'nullable|string|max:16',
-            'kondisi' => 'required|string',
-            'kelompok_rentan' => 'required|string',
-            'kebutuhan' => 'nullable|string',
+            'laporan_id'      => 'required|exists:laporans,id',
+            'posko_id'        => 'required|exists:poskos,id',
+            'name'            => 'required|string|max:255',
+            'usia'            => 'required|numeric|min:0|max:120',
+            'nik'             => 'nullable|string|max:16',
+            'kondisi'         => ['required', Rule::in(['sehat', 'luka', 'kritis'])],
+            'kelompok_rentan' => ['nullable', Rule::in(['hamil', 'bayi', 'lansia', 'disabilitas'])],
+            'kebutuhan'       => 'nullable|string',
         ]);
 
         $oldPoskoId = $korban->posko_id;
@@ -105,7 +100,6 @@ class KorbanController extends Controller
 
         $korban->update($validated);
 
-        // Jika posko berpindah, sesuaikan jumlah pengungsi
         if ($oldPoskoId != $newPoskoId) {
             if ($oldPoskoId) {
                 Posko::where('id', $oldPoskoId)->where('jumlah_pengungsi', '>', 0)->decrement('jumlah_pengungsi');
