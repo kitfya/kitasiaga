@@ -85,10 +85,10 @@
                     <div class="flex items-center gap-1.5">
                         <select name="kelompok_rentan" id="kelompok_rentan" onchange="this.form.submit()" class="w-full border border-neutral-300 rounded-md px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-red-600 bg-white">
                             <option value="all">Semua Kategori</option>
-                            <option value="Bayi/Balita" {{ request('kelompok_rentan') == 'Bayi/Balita' ? 'selected' : '' }}>Bayi / Balita</option>
-                            <option value="Lansia" {{ request('kelompok_rentan') == 'Lansia' ? 'selected' : '' }}>Lansia</option>
-                            <option value="Hamil" {{ request('kelompok_rentan') == 'Hamil' ? 'selected' : '' }}>Ibu Hamil</option>
-                            <option value="Disabilitas" {{ request('kelompok_rentan') == 'Disabilitas' ? 'selected' : '' }}>Disabilitas</option>
+                            <option value="bayi" {{ request('kelompok_rentan') == 'bayi' ? 'selected' : '' }}>Bayi / Balita</option>
+                            <option value="lansia" {{ request('kelompok_rentan') == 'lansia' ? 'selected' : '' }}>Lansia</option>
+                            <option value="hamil" {{ request('kelompok_rentan') == 'hamil' ? 'selected' : '' }}>Ibu Hamil</option>
+                            <option value="disabilitas" {{ request('kelompok_rentan') == 'disabilitas' ? 'selected' : '' }}>Disabilitas</option>
                             <option value="None" {{ request('kelompok_rentan') == 'None' ? 'selected' : '' }}>Umum</option>
                         </select>
                         <a href="{{ route('korban.index') }}" title="Reset Filter" class="p-1.5 border border-neutral-300 text-neutral-600 hover:bg-neutral-100 rounded-md inline-flex items-center justify-center">
@@ -141,19 +141,19 @@
                                     </td>
                                     <td class="px-4 py-3 whitespace-nowrap">
                                         <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] border 
-                                            {{ $v->kelompok_rentan === 'Bayi/Balita' ? 'text-purple-700 bg-purple-50 border-purple-200 font-medium' : '' }}
-                                            {{ $v->kelompok_rentan === 'Lansia' ? 'text-blue-700 bg-blue-50 border-blue-200 font-medium' : '' }}
-                                            {{ $v->kelompok_rentan === 'Hamil' ? 'text-pink-700 bg-pink-50 border-pink-200 font-medium' : '' }}
-                                            {{ $v->kelompok_rentan === 'Disabilitas' ? 'text-orange-700 bg-orange-50 border-orange-200 font-medium' : '' }}
-                                            {{ in_array($v->kelompok_rentan, ['None', 'Umum']) ? 'text-neutral-500 bg-neutral-100 border-neutral-200' : '' }}">
+                                            {{ $v->kelompok_rentan === 'bayi' ? 'text-purple-700 bg-purple-50 border-purple-200 font-medium' : '' }}
+                                            {{ $v->kelompok_rentan === 'lansia' ? 'text-blue-700 bg-blue-50 border-blue-200 font-medium' : '' }}
+                                            {{ $v->kelompok_rentan === 'hamil' ? 'text-pink-700 bg-pink-50 border-pink-200 font-medium' : '' }}
+                                            {{ $v->kelompok_rentan === 'disabilitas' ? 'text-orange-700 bg-orange-50 border-orange-200 font-medium' : '' }}
+                                            {{ in_array($v->kelompok_rentan, ['', 'Umum']) ? 'text-neutral-500 bg-neutral-100 border-neutral-200' : '' }}">
                                             {{ in_array($v->kelompok_rentan, ['None', 'Umum']) ? 'Umum' :$v->kelompok_rentan }}
                                         </span>
                                     </td>
                                     <td class="px-4 py-3 whitespace-nowrap">
                                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] border 
-                                            {{ $v->kondisi === 'Sehat' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : '' }}
-                                            {{ $v->kondisi === 'Luka-luka' ? 'bg-amber-50 text-amber-700 border-amber-200' : '' }}
-                                            {{$v->kondisi === 'Kritis' ? 'bg-red-50 text-red-700 border-red-200 font-semibold' : '' }}">
+                                            {{ $v->kondisi === 'sehat' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : '' }}
+                                            {{ $v->kondisi === 'luka' ? 'bg-amber-50 text-amber-700 border-amber-200' : '' }}
+                                            {{$v->kondisi === 'kritis' ? 'bg-red-50 text-red-700 border-red-200 font-semibold' : '' }}">
                                             {{ $v->kondisi }}
                                         </span>
                                     </td>
@@ -232,7 +232,7 @@
                             <label class="block text-xs font-medium text-neutral-700 mb-1">Laporan Bencana Terkait <span class="text-red-600">*</span></label>
                             <select name="laporan_id" x-model="formData.laporan_id" required class="w-full border border-neutral-300 rounded-md px-3 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-red-600 bg-white">
                                 <option value="">-- Pilih Laporan --</option>
-                                @foreach($laporanList as$lap)
+                                @foreach($laporanList as $lap)
                                     <option value="{{ $lap->id }}">{{ $lap->id }} - {{$lap->tipe }}</option>
                                 @endforeach
                             </select>
@@ -241,7 +241,7 @@
                             <label class="block text-xs font-medium text-neutral-700 mb-1">Posko Penampungan <span class="text-red-600">*</span></label>
                             <select name="posko_id" x-model="formData.posko_id" required class="w-full border border-neutral-300 rounded-md px-3 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-red-600 bg-white">
                                 <option value="">-- Pilih Posko --</option>
-                                @foreach($poskoList as$p)
+                                @foreach($poskoList as $p)
                                     <option value="{{ $p->id }}">{{ $p->name }}</option>
                                 @endforeach
                             </select>
@@ -269,19 +269,19 @@
                         <div>
                             <label class="block text-xs font-medium text-neutral-700 mb-1">Kondisi Kesehatan <span class="text-red-600">*</span></label>
                             <select name="kondisi" x-model="formData.kondisi" required class="w-full border border-neutral-300 rounded-md px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-red-600 bg-white">
-                                <option value="Sehat">Sehat</option>
-                                <option value="Luka-luka">Luka-luka (Ringan/Sedang)</option>
-                                <option value="Kritis">Kritis (Perlu Rujukan RS)</option>
+                                <option value="sehat">Sehat</option>
+                                <option value="luka">Luka-luka (Ringan/Sedang)</option>
+                                <option value="kritis">Kritis (Perlu Rujukan RS)</option>
                             </select>
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-neutral-700 mb-1">Kelompok Rentan <span class="text-red-600">*</span></label>
-                            <select name="kelompok_rentan" x-model="formData.kelompok_rentan" required class="w-full border border-neutral-300 rounded-md px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-red-600 bg-white">
-                                <option value="None">Tidak Termasuk (Umum)</option>
-                                <option value="Bayi/Balita">Bayi / Balita (&le; 5 Tahun)</option>
-                                <option value="Lansia">Lansia (&ge; 60 Tahun)</option>
-                                <option value="Hamil">Ibu Hamil / Menyusui</option>
-                                <option value="Disabilitas">Penyandang Disabilitas</option>
+                            <select name="kelompok_rentan" x-model="formData.kelompok_rentan" class="w-full border border-neutral-300 rounded-md px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-red-600 bg-white">
+                                <option value="">Tidak Termasuk (Umum)</option>
+                                <option value="bayi">Bayi / Balita (&le; 5 Tahun)</option>
+                                <option value="lansia">Lansia (&ge; 60 Tahun)</option>
+                                <option value="hamil">Ibu Hamil / Menyusui</option>
+                                <option value="disabilitas">Penyandang Disabilitas</option>
                             </select>
                         </div>
                     </div>
