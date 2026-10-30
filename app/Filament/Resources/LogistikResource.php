@@ -18,6 +18,14 @@ class LogistikResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-archive-box';
 
+    protected static ?string $navigationGroup = 'Operasional';
+
+    protected static ?string $navigationLabel = 'Logistik';
+
+    protected static ?string $modelLabel = 'barang logistik';
+
+    protected static ?string $pluralModelLabel = 'logistik';
+
     public static function form(Form $form): Form
     {
         return $form
@@ -45,11 +53,18 @@ class LogistikResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('name')
+                    ->label('Nama Barang')
                     ->searchable(),
                 TextColumn::make('tipe')
+                    ->label('Kategori')
+                    ->badge()
                     ->searchable(),
-                TextColumn::make('jumlah'),
+                TextColumn::make('jumlah')
+                    ->label('Jumlah')
+                    ->numeric()
+                    ->sortable(),
                 TextColumn::make('posko.name')
+                    ->label('Posko')
                     ->searchable(),
             ])
             ->filters([

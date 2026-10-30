@@ -1,31 +1,12 @@
 <!DOCTYPE html>
-<html lang="id" class="h-full">
+<html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <title>KitaSiaga | Portal Tanggap Darurat Bencana & Navigasi Posko</title>
   
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            brand: {
-              red: '#dc2626',
-              redHover: '#b91c1c',
-              redDark: '#450a0a',
-              accent: '#059669',
-            }
-          },
-          fontFamily: {
-            sans: ['"Plus Jakarta Sans"', 'Inter', 'sans-serif']
-          }
-        }
-      }
-    }
-  </script>
+  @vite(['resources/css/app.css'])
 
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
@@ -34,72 +15,42 @@
     .leaflet-container {
       z-index: 1 !important;
     }
-    .marker-emergency-pin {
-      width: 18px;
-      height: 18px;
-      background-color: #dc2626;
-      border: 3px solid #ffffff;
-      border-radius: 50%;
-      box-shadow: 0 0 8px rgba(220, 38, 38, 0.8);
-      animation: pulse 1.5s infinite;
-    }
-    .marker-posko-pin {
-      width: 24px;
-      height: 24px;
-      background-color: #059669;
-      color: white;
-      font-weight: bold;
-      font-size: 11px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: 2px solid #ffffff;
-      border-radius: 50%;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-    }
-    @keyframes pulse {
-      0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.7); }
-      70% { transform: scale(1.1); box-shadow: 0 0 0 8px rgba(220, 38, 38, 0); }
-      100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); }
-    }
   </style>
 </head>
 <body class="bg-neutral-50 text-neutral-900 min-h-screen flex flex-col antialiased selection:bg-red-100 selection:text-red-800">
 
-  <header class="bg-white border-b border-neutral-200 sticky top-0 z-30 shadow-xs">
+  <header class="sticky top-0 z-30 border-b border-neutral-200 bg-white/95 shadow-sm backdrop-blur">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex items-center justify-between h-16 gap-2">
+      <div class="flex h-[4.5rem] items-center justify-between gap-3">
         <!-- Logo & Branding -->
-        <div class="flex items-center gap-2.5 shrink-0">
-          <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-md bg-red-600 flex items-center justify-center text-white shadow-xs">
+        <a href="{{ route('welcome') }}" class="flex shrink-0 items-center gap-3">
+          <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-brand-red text-white shadow-sm">
             <img src="{{ asset('images/logo.webp') }}" alt="logo" class="w-full h-full object-cover rounded-md"/>
           </div>
           <div>
-            <span class="text-sm sm:text-base font-bold tracking-tight text-neutral-900 block leading-tight">KitaSiaga</span>
-            <span class="text-[10px] sm:text-[11px] font-medium text-neutral-500 block uppercase tracking-wider">Portal Darurat</span>
+            <span class="block text-base font-bold leading-tight tracking-tight text-neutral-900">KitaSiaga</span>
+            <span class="block text-[10px] font-semibold uppercase tracking-[0.14em] text-neutral-500">Portal Darurat</span>
           </div>
-        </div>
+        </a>
 
         <!-- Navigation Menu -->
-        <nav class="flex items-center gap-1.5 sm:gap-3">
-          <a href="{{ route('welcome') }}" class="px-2.5 py-1.5 sm:px-3 sm:py-2 text-xs font-semibold rounded-md bg-red-50 text-red-700 border border-red-200 hover:bg-red-100 transition-colors flex items-center gap-1.5">
-            <svg class="w-4 h-4 text-red-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+        <nav class="flex items-center gap-1 sm:gap-3">
+          <a href="{{ route('welcome') }}" class="hidden px-2.5 py-1.5 sm:px-3 sm:py-2 text-xs font-semibold rounded-md bg-red-50 text-red-700 border shadow-sm hover:bg-red-100 transition-colors items-center gap-1.5 sm:inline-flex">
+            <svg class="w-4 h-4 text-brand-red shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
             <span class="hidden sm:inline">Portal Warga</span>
           </a>
 
-          <div class="h-4 w-px bg-neutral-200 mx-0.5 hidden sm:block"></div>
-
           @auth
-            <a href="{{ route('dashboard') }}" class="px-2.5 py-1.5 sm:px-3 sm:py-2 text-xs font-semibold rounded-md bg-neutral-900 text-white hover:bg-neutral-800 transition-colors flex items-center gap-1.5">
+            <a href="{{ route('dashboard') }}" class="inline-flex items-center gap-2 rounded-lg bg-white px-3.5 py-2.5 text-sm font-semibold transition-colors hover:bg-white-/90 shadow-sm">
               <svg class="w-4 h-4 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
-              <span class="hidden xs:inline">Dashboard</span> Relawan
+              Dashboard relawan
             </a>
           @else
-            <a href="{{ route('login') }}" class="px-2.5 py-1.5 sm:px-3 sm:py-2 text-xs font-medium rounded-md text-neutral-700 hover:text-neutral-900 hover:bg-neutral-100 transition-colors flex items-center gap-1">
+            <a href="{{ route('login') }}" aria-label="Masuk relawan" class="inline-flex items-center gap-1.5 rounded-lg px-2.5 py-2 text-sm font-medium text-neutral-700 transition-colors hover:bg-neutral-100 hover:text-neutral-900">
               <svg class="w-4 h-4 text-neutral-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path></svg>
-              <span>Masuk</span>
+              <span class="hidden sm:inline">Masuk</span>
             </a>
-            <a href="{{ route('register') }}" class="px-2.5 py-1.5 sm:px-3 sm:py-2 text-xs font-semibold rounded-md bg-emerald-600 text-white hover:bg-emerald-700 transition-colors flex items-center gap-1.5 shadow-xs">
+            <a href="{{ route('register') }}" class="inline-flex items-center gap-2 rounded-lg bg-brand-accent px-3 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-brand-accentHover">
               <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path></svg>
               <span>Daftar</span>
             </a>
@@ -110,109 +61,165 @@
   </header>
 
   <main class="flex-grow">
-    <section class="bg-white border-b border-neutral-200 py-8 sm:py-14">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="max-w-3xl">
-          <h1 class="text-2xl sm:text-4xl font-bold tracking-tight text-neutral-900 leading-snug sm:leading-tight">
-            Laporkan Kejadian Bencana Secara Cepat, Dapatkan Jalur Evakuasi Terdekat
-          </h1>
-          <p class="mt-3 sm:mt-4 text-sm sm:text-base text-neutral-600 leading-relaxed">
-            Sistem terintegrasi untuk mendata kejadian banjir, longsor, dan kedaruratan lainnya. Lokasi Anda dideteksi secara presisi menggunakan GPS satelit untuk langsung mengarahkan Anda ke posko penampungan terdekat.
-          </p>
+    <section class="relative overflow-hidden border-b border-neutral-200 bg-white">
+      <div class="absolute inset-y-0 right-0 hidden w-1/2 bg-neutral-50 lg:block" aria-hidden="true"></div>
+      <div class="relative mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8 lg:py-20">
+        <div class="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+          <div class="max-w-2xl">
+            <div class="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-800">
+              <span class="relative flex h-2 w-2">
+                <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-500 opacity-50"></span>
+                <span class="relative inline-flex h-2 w-2 rounded-full bg-emerald-600"></span>
+              </span>
+              Layanan tanggap darurat warga
+            </div>
+            <h1 class="mt-5 text-4xl font-bold leading-[1.12] tracking-tight text-neutral-950 sm:text-5xl lg:text-[3.5rem]">
+              Saat darurat, <span class="text-brand-red">bantuan harus lebih dekat.</span>
+            </h1>
+            <p class="mt-5 max-w-xl text-base leading-7 text-neutral-600 sm:text-lg">
+              Laporkan kejadian, temukan posko evakuasi terdekat, dan dapatkan petunjuk arah dalam satu tempat.
+            </p>
 
-          <div class="mt-6 sm:mt-8 flex flex-col sm:flex-row sm:items-center gap-3">
-            <button type="button" onclick="openReportModal()" class="w-full sm:w-auto bg-red-600 text-white hover:bg-red-700 rounded-md px-5 py-3 text-sm font-semibold transition-colors shadow-xs flex items-center justify-center gap-2">
-              <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"></path></svg>
-              Laporkan Bencana Sekarang
-            </button>
-            <a href="#mapOverviewSection" class="w-full sm:w-auto border border-neutral-300 text-neutral-700 hover:bg-neutral-50 rounded-md px-4 py-3 text-sm font-medium transition-colors flex items-center justify-center gap-2 text-center">
-              <svg class="w-4 h-4 text-neutral-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg>
-              Lihat Peta Posko & Rute
-            </a>
+            <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+              <button type="button" onclick="openReportModal()" class="inline-flex items-center justify-center gap-2 rounded-lg bg-brand-red px-5 py-3.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-brand-redHover focus:outline-none focus:ring-2 focus:ring-brand-red focus:ring-offset-2">
+                <svg class="h-5 w-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"></path></svg>
+                Laporkan kejadian
+              </button>
+              <a href="#mapOverviewSection" class="inline-flex items-center justify-center gap-2 rounded-lg border border-neutral-300 bg-white px-5 py-3.5 text-sm font-semibold text-neutral-700 transition-colors hover:border-neutral-400 hover:bg-neutral-50 focus:outline-none focus:ring-2 focus:ring-neutral-300 focus:ring-offset-2">
+                <svg class="h-4 w-4 text-neutral-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg>
+                Lihat peta posko
+              </a>
+            </div>
+
+            <div class="mt-10 grid grid-cols-3 border-t border-neutral-200 pt-6">
+              <div class="pr-3 sm:pr-5">
+                <span class="block text-2xl font-bold tracking-tight text-neutral-900 sm:text-3xl">{{ $totalPosko }}</span>
+                <span class="mt-1 block text-xs leading-5 text-neutral-500 sm:text-sm">posko aktif</span>
+              </div>
+              <div class="border-l border-neutral-200 px-3 sm:px-5">
+                <span class="block text-2xl font-bold tracking-tight text-neutral-900 sm:text-3xl">{{ $totalPengungsi }}</span>
+                <span class="mt-1 block text-xs leading-5 text-neutral-500 sm:text-sm">jiwa tertampung</span>
+              </div>
+              <div class="border-l border-neutral-200 pl-3 sm:pl-5">
+                <span class="block text-2xl font-bold tracking-tight text-brand-accent sm:text-3xl">{{ $kapasitasTersedia }}</span>
+                <span class="mt-1 block text-xs leading-5 text-neutral-500 sm:text-sm">slot tersedia</span>
+              </div>
+            </div>
           </div>
 
-          <div class="mt-8 sm:mt-10 pt-6 border-t border-neutral-100 grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 gap-4">
-            <div class="bg-neutral-50 sm:bg-transparent p-3 sm:p-0 rounded-lg border sm:border-0 border-neutral-100">
-              <span class="text-xs text-neutral-500 block">Posko Aktif Bersiaga</span>
-              <span class="text-lg sm:text-xl font-bold text-neutral-900 mt-0.5 block">{{ $totalPosko }} Titik Terpadu</span>
+          <aside class="relative mx-auto w-full max-w-xl lg:ml-auto">
+            <div class="absolute -right-5 -top-5 h-28 w-28 rounded-full bg-brand-red" aria-hidden="true"></div>
+            <div class="relative overflow-hidden rounded-2xl bg-white p-6 text-black shadow-sm sm:p-8">
+              <div class="absolute -right-16 -top-20 h-56 w-56 rounded-full border-[32px] border-white/5" aria-hidden="true"></div>
+              <div class="relative">
+                <div class="flex items-center justify-between gap-4">
+                  <div class="flex items-center gap-3">
+                    <span class="flex h-8 w-8 items-center justify-center rounded-xl bg-white/10 text-brand-red">
+                      <svg class="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 21s7-4.5 7-11a7 7 0 10-14 0c0 6.5 7 11 7 11z"></path><circle cx="12" cy="10" r="2.5" stroke-width="1.8"></circle></svg>
+                    </span>
+                    <div>
+                      <p class="text-sm font-semibold">Panduan keadaan darurat</p>
+                      <p class="mt-0.5 text-xs text-black">Mulai dari langkah paling penting</p>
+                    </div>
+                  </div>
+                  <span class="rounded-full bg-brand-red px-2.5 py-1 text-[11px] font-semibold text-white">Siaga</span>
+                </div>
+                <div class="mt-4 space-y-5">
+                  <div class="ml-4 h-4 border-l border-dashed border-neutral-600"></div>
+                  <div class="flex gap-4">
+                    <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-white bg-brand-red text-sm font-bold">1</span>
+                    <div>
+                      <p class="text-sm font-semibold">Laporkan lokasi kejadian</p>
+                      <p class="mt-1 text-xs leading-5 text-black">Bagikan kondisi terkini agar tim dapat segera merespons.</p>
+                    </div>
+                  </div>
+                  <div class="ml-4 h-4 border-l border-dashed border-neutral-600"></div>
+                  <div class="flex gap-4">
+                    <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-brand-red text-sm font-bold text-white">2</span>
+                    <div>
+                      <p class="text-sm font-semibold">Ikuti rekomendasi posko</p>
+                      <p class="mt-1 text-xs leading-5 text-black">Lihat jarak dan arah menuju titik bantuan terdekat.</p>
+                    </div>
+                  </div>
+                </div>
+
+                <a href="#mapOverviewSection" class="mt-8 flex items-center justify-between rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-medium transition-colors hover:bg-white/10">
+                  <span>Lihat posko dan rute evakuasi</span>
+                  <svg class="h-4 w-4 text-brand-red" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14m-7-7l7 7-7 7"></path></svg>
+                </a>
+              </div>
             </div>
-            <div class="bg-neutral-50 sm:bg-transparent p-3 sm:p-0 rounded-lg border sm:border-0 border-neutral-100">
-              <span class="text-xs text-neutral-500 block">Total Pengungsi Tertampung</span>
-              <span class="text-lg sm:text-xl font-bold text-neutral-900 mt-0.5 block">{{ $totalPengungsi }} Jiwa</span>
-            </div>
-            <div class="bg-neutral-50 sm:bg-transparent p-3 sm:p-0 rounded-lg border sm:border-0 border-neutral-100 xs:col-span-2 sm:col-span-1">
-              <span class="text-xs text-neutral-500 block">Kapasitas Aman Tersedia</span>
-              <span class="text-lg sm:text-xl font-bold text-emerald-700 mt-0.5 block">{{ $kapasitasTersedia }} Slot</span>
-            </div>
-          </div>
+          </aside>
         </div>
       </div>
     </section>
 
-    <section id="mapOverviewSection" class="py-8 sm:py-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div id="navigationSection" class="space-y-4 sm:space-y-6">
+    <section id="mapOverviewSection" class="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
+      <div id="navigationSection" class="space-y-6 sm:space-y-8">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <div>
-            <h2 class="text-xs sm:text-sm font-semibold text-red-600 uppercase tracking-wider">Petunjuk Arah & Posko Terdekat</h2>
-            <p class="text-lg sm:text-xl font-bold text-neutral-900 mt-0.5">Rute Jalur Evakuasi Teraman Berdasarkan Titik Kejadian</p>
+            <p class="text-sm font-semibold uppercase tracking-wider text-brand-red">Peta bantuan</p>
+            <h2 class="mt-1 text-2xl font-bold tracking-tight text-neutral-900 sm:text-3xl">Temukan posko terdekat</h2>
+            <p class="mt-2 max-w-2xl text-sm leading-6 text-neutral-600 sm:text-base">Peta akan menampilkan lokasi Anda dan rekomendasi posko berdasarkan jarak.</p>
           </div>
-          <div class="inline-flex items-center gap-2 self-start sm:self-auto">
-            <span class="inline-flex items-center gap-1.5 text-xs text-neutral-600 bg-white border border-neutral-200 px-2.5 py-1 rounded-md shadow-2xs">
+          <div class="inline-flex flex-wrap items-center gap-2 self-start sm:self-auto">
+            <span class="inline-flex items-center gap-2 rounded-full border border-neutral-200 bg-white px-3 py-1.5 text-xs font-medium text-neutral-600">
               <span class="w-2.5 h-2.5 rounded-full bg-red-600"></span> Titik Kejadian
             </span>
-            <span class="inline-flex items-center gap-1.5 text-xs text-neutral-600 bg-white border border-neutral-200 px-2.5 py-1 rounded-md shadow-2xs">
+            <span class="inline-flex items-center gap-2 rounded-full border border-neutral-200 bg-white px-3 py-1.5 text-xs font-medium text-neutral-600">
               <span class="w-2.5 h-2.5 rounded-full bg-emerald-600"></span> Posko Evakuasi
             </span>
           </div>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-          <div class="lg:col-span-8 bg-white border border-neutral-200 rounded-lg p-2 shadow-xs z-0 relative">
-            <div id="evacuationMap" class="w-full h-[320px] sm:h-[420px] rounded-md border border-neutral-200 relative bg-neutral-100 z-0"></div>
-            <div class="p-2 flex flex-col sm:flex-row sm:items-center justify-between text-[11px] text-neutral-500 gap-1">
+          <div class="relative z-0 overflow-hidden rounded-2xl border border-neutral-200 bg-white p-2 shadow-sm lg:col-span-8">
+            <div id="evacuationMap" class="relative z-0 h-[320px] w-full rounded-xl border border-neutral-200 bg-neutral-100 sm:h-[460px]"></div>
+            <div class="flex flex-col gap-1 px-2 py-3 text-[11px] text-neutral-500 sm:flex-row sm:items-center sm:justify-between">
               <span>Data Peta: &copy; OpenStreetMap Kontributor &bull; Leaflet.js</span>
-              <span class="font-medium text-emerald-700">Rute dihitung berdasarkan algoritma jarak terdekat</span>
+              <span class="font-medium text-brand-accent">Rute dihitung berdasarkan jarak terdekat</span>
             </div>
           </div>
 
           <div class="lg:col-span-4 space-y-4">
-            <div class="border border-neutral-200 bg-white rounded-lg p-4 sm:p-5 shadow-xs">
-              <div class="flex items-center justify-between pb-3 border-b border-neutral-100">
-                <span class="text-xs font-semibold uppercase tracking-wider text-red-600">Rekomendasi Posko</span>
-                <span id="navTicketId" class="text-xs font-mono bg-neutral-100 px-2 py-0.5 rounded text-neutral-700">-</span>
+            <div class="rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm sm:p-6">
+              <div class="flex items-center justify-between gap-3 border-b border-neutral-100 pb-4">
+                <span class="text-sm font-semibold text-neutral-900">Rekomendasi posko</span>
+                <span id="navTicketId" class="rounded-md bg-neutral-100 px-2 py-1 text-xs font-mono text-neutral-600">-</span>
               </div>
 
-              <div class="mt-4 space-y-3">
+              <div class="mt-5 space-y-4">
                 <div>
-                  <h3 id="navPoskoName" class="text-base font-bold text-neutral-900 leading-tight">Pilih atau Kirim Laporan</h3>
-                  <p id="navPoskoAddress" class="text-xs text-neutral-500 mt-1">Sistem akan secara otomatis menentukan posko terdekat dari lokasi Anda.</p>
+                  <p class="text-xs font-medium text-neutral-500">Titik bantuan terdekat</p>
+                  <h3 id="navPoskoName" class="mt-1 text-lg font-bold leading-tight text-neutral-900">Menentukan posko terdekat...</h3>
+                  <p id="navPoskoAddress" class="mt-1.5 text-sm leading-5 text-neutral-500">Izinkan akses lokasi untuk mendapatkan rekomendasi.</p>
                 </div>
 
-                <div class="bg-neutral-50 p-3 rounded-md border border-neutral-200 grid grid-cols-2 gap-2">
+                <div class="grid grid-cols-2 gap-3 rounded-xl bg-neutral-50 p-4">
                   <div>
-                    <span class="text-[11px] text-neutral-500 block">Jarak Terdekat</span>
-                    <span id="navDistance" class="text-sm font-bold text-neutral-900">- km</span>
+                    <span class="block text-xs text-neutral-500">Jarak terdekat</span>
+                    <span id="navDistance" class="mt-1 block text-base font-bold text-neutral-900">- km</span>
                   </div>
                   <div>
-                    <span class="text-[11px] text-neutral-500 block">Estimasi Tempuh</span>
-                    <span id="navWalkingTime" class="text-xs font-semibold text-emerald-700">-</span>
+                    <span class="block text-xs text-neutral-500">Estimasi tempuh</span>
+                    <span id="navWalkingTime" class="mt-1 block text-sm font-semibold text-brand-accent">-</span>
                   </div>
                 </div>
 
                 <div class="space-y-1.5 pt-1">
-                  <div class="flex items-center justify-between text-xs">
+                  <div class="flex items-center justify-between text-sm">
                     <span class="text-neutral-500">Kapasitas Posko:</span>
                     <span id="navCapacity" class="font-medium text-neutral-900">-</span>
                   </div>
                 </div>
 
-                <div class="pt-3 border-t border-neutral-100 flex flex-col gap-2">
-                  <a id="btnOpenGmapsNav" href="#" target="_blank" rel="noopener" class="w-full bg-emerald-600 text-white hover:bg-emerald-700 rounded-md px-3.5 py-2.5 text-xs font-semibold transition-colors text-center flex items-center justify-center gap-2">
+                <div class="flex flex-col gap-2 border-t border-neutral-100 pt-4">
+                  <a id="btnOpenGmapsNav" href="#" target="_blank" rel="noopener" class="flex w-full items-center justify-center gap-2 rounded-lg bg-brand-accent px-3.5 py-3 text-sm font-semibold text-white transition-colors hover:bg-brand-accentHover">
                     <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path></svg>
-                    Buka Petunjuk Arah di Google Maps
+                    Buka petunjuk arah
                   </a>
-                  <button type="button" onclick="openReportModal()" class="w-full border border-neutral-300 text-neutral-700 hover:bg-neutral-50 rounded-md px-3 py-2 text-xs font-medium transition-colors text-center">
-                    Buat Laporan Darurat Baru
+                  <button type="button" onclick="openReportModal()" class="w-full rounded-lg border border-neutral-300 px-3 py-2.5 text-sm font-semibold text-neutral-700 transition-colors hover:bg-neutral-50">
+                    Buat laporan darurat
                   </button>
                 </div>
               </div>
@@ -221,17 +228,18 @@
         </div>
       </div>
 
-      <div class="mt-10 sm:mt-12 space-y-4">
+      <div id="publicReportsSection" class="mt-14 space-y-5 border-t border-neutral-200 pt-10 sm:mt-16 sm:pt-12">
         <div class="flex items-center justify-between">
           <div>
-            <h3 class="text-xs sm:text-sm font-semibold text-red-600 uppercase tracking-wider">Pantauan Publik Terkini</h3>
-            <p class="text-base sm:text-lg font-bold text-neutral-900 mt-0.5">Laporan Kejadian Bencana Terverifikasi Lapangan</p>
+            <p class="text-sm font-semibold uppercase tracking-wider text-brand-red">Informasi lapangan</p>
+            <h2 class="mt-1 text-2xl font-bold tracking-tight text-neutral-900 sm:text-3xl">Laporan kejadian terkini</h2>
+            <p class="mt-2 text-sm text-neutral-600 sm:text-base">Pantauan laporan bencana yang sudah diverifikasi relawan.</p>
           </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
           @forelse($publicReports as $report)
-          <article class="p-4 border border-neutral-200 rounded-lg bg-white">
+          <article class="rounded-xl border border-neutral-200 bg-white p-5 transition-shadow hover:shadow-sm">
             <div class="flex items-start justify-between gap-3">
               <div class="space-y-1">
                 <div class="flex items-center gap-2 flex-wrap">

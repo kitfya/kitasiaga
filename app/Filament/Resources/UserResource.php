@@ -18,6 +18,14 @@ class UserResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-users';
 
+    protected static ?string $navigationGroup = 'Manajemen Tim';
+
+    protected static ?string $navigationLabel = 'Akun Pengguna';
+
+    protected static ?string $modelLabel = 'akun pengguna';
+
+    protected static ?string $pluralModelLabel = 'akun pengguna';
+
     public static function form(Form $form): Form
     {
         return $form
@@ -47,10 +55,18 @@ class UserResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('name'),
-                TextColumn::make('email'),
-                TextColumn::make('phone'),
-                TextColumn::make('role'),
+                TextColumn::make('name')
+                    ->label('Nama')
+                    ->searchable()
+                    ->sortable(),
+                TextColumn::make('email')
+                    ->label('Email')
+                    ->searchable(),
+                TextColumn::make('phone')
+                    ->label('No. Telepon'),
+                TextColumn::make('role')
+                    ->label('Peran')
+                    ->badge(),
             ])
             ->filters([
                 //

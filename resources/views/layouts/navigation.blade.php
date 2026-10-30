@@ -1,19 +1,15 @@
-<!-- Load Alpine.js & Tailwind via CDN jika belum di-load di layout utama -->
-<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-<script src="https://cdn.tailwindcss.com"></script>
-
-<header class="bg-white border-b border-neutral-200 sticky top-0 z-30 shadow-xs" x-data="{ mobileMenuOpen: false }">
+<header class="sticky top-0 z-30 border-b border-neutral-200 bg-white/95 shadow-sm backdrop-blur" x-data="{ mobileMenuOpen: false }">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex items-center justify-between h-16 gap-2">
+        <div class="flex h-[4.5rem] items-center justify-between gap-3">
             
             <!-- Logo & Branding -->
             <a href="{{ route('dashboard') }}" class="flex items-center gap-2.5 sm:gap-3 hover:opacity-90 transition-opacity shrink-0">
-                <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-md bg-red-600 flex items-center justify-center text-white shadow-xs shrink-0">
+                <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-brand-red text-white shadow-sm">
                     <img src="{{ asset('images/logo.webp') }}" alt="logo" class="w-full h-full object-cover rounded-md"/>
                 </div>
                 <div>
-                    <span class="text-sm sm:text-base font-bold tracking-tight text-neutral-900 block leading-tight">KitaSiaga</span>
-                    <span class="text-[10px] sm:text-[11px] font-medium text-neutral-500 block uppercase tracking-wider">Dashboard Relawan</span>
+                    <span class="block text-base font-bold leading-tight tracking-tight text-neutral-900">KitaSiaga</span>
+                    <span class="block text-[10px] font-semibold uppercase tracking-[0.14em] text-neutral-500">Dashboard Relawan</span>
                 </div>
             </a>
 

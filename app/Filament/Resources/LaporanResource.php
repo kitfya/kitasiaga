@@ -18,6 +18,14 @@ class LaporanResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-exclamation-triangle';
 
+    protected static ?string $navigationGroup = 'Operasional';
+
+    protected static ?string $navigationLabel = 'Laporan Bencana';
+
+    protected static ?string $modelLabel = 'laporan bencana';
+
+    protected static ?string $pluralModelLabel = 'laporan bencana';
+
     public static function form(Form $form): Form
     {
         return $form
@@ -30,13 +38,23 @@ class LaporanResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('kode'),
+                TextColumn::make('kode')
+                    ->label('Kode')
+                    ->searchable()
+                    ->sortable(),
                 TextColumn::make('name')
+                    ->label('Pelapor')
                     ->searchable(),
-                TextColumn::make('tipe'),
-                TextColumn::make('description'),
+                TextColumn::make('tipe')
+                    ->label('Jenis Bencana')
+                    ->badge()
+                    ->searchable(),
+                TextColumn::make('description')
+                    ->label('Deskripsi')
+                    ->limit(60),
                 ImageColumn::make('bukti'),
-                ToggleColumn::make('is_valid'),
+                ToggleColumn::make('is_valid')
+                    ->label('Terverifikasi'),
             ])
             ->filters([
                 //

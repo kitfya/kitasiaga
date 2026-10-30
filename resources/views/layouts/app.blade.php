@@ -7,8 +7,6 @@
 
         <title>{{ config('app.name', 'Laravel') }}</title>
 
-        <meta charset="utf-8" />
-        <meta content="width=device-width, initial-scale=1.0" name="viewport" />
         <!-- Leaflet.js CSS & JS -->
         <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
         <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
@@ -19,7 +17,7 @@
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="bg-neutral-50 text-neutral-900 min-h-screen flex flex-col antialiased selection:bg-red-100 selection:text-red-800">
+    <body class="portal-app flex min-h-screen flex-col bg-neutral-50 text-neutral-900 antialiased selection:bg-red-100 selection:text-red-800">
             @include('layouts.navigation')
 
             <!-- Page Heading -->
@@ -28,10 +26,9 @@
             @endisset
 
             <!-- Page Content -->
-            <main class="flex-grow py-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full space-y-8">
+            <main class="portal-main mx-auto w-full max-w-7xl flex-grow space-y-8 px-4 py-8 sm:px-6 lg:px-8">
                 {{ $slot }}
             </main>
-        </div>
 
         <script>
             document.addEventListener('alpine:init', () => {

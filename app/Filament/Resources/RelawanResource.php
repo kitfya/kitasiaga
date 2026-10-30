@@ -18,6 +18,14 @@ class RelawanResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
 
+    protected static ?string $navigationGroup = 'Manajemen Tim';
+
+    protected static ?string $navigationLabel = 'Relawan';
+
+    protected static ?string $modelLabel = 'relawan';
+
+    protected static ?string $pluralModelLabel = 'relawan';
+
     public static function form(Form $form): Form
     {
         return $form
@@ -57,9 +65,16 @@ class RelawanResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('user.name'),
-                TextColumn::make('bidang'),
-                TextColumn::make('instansi'),
+                TextColumn::make('user.name')
+                    ->label('Nama')
+                    ->searchable()
+                    ->sortable(),
+                TextColumn::make('bidang')
+                    ->label('Bidang')
+                    ->badge(),
+                TextColumn::make('instansi')
+                    ->label('Instansi')
+                    ->searchable(),
             ])
             ->filters([
                 //

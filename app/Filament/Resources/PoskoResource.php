@@ -21,6 +21,14 @@ class PoskoResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-shield-check';
 
+    protected static ?string $navigationGroup = 'Operasional';
+
+    protected static ?string $navigationLabel = 'Posko';
+
+    protected static ?string $modelLabel = 'posko';
+
+    protected static ?string $pluralModelLabel = 'posko';
+
     public static function form(Form $form): Form
     {
         return $form
@@ -69,11 +77,21 @@ class PoskoResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('name')
+                    ->label('Nama Posko')
                     ->searchable(),
-                TextColumn::make('alamat'),
-                TextColumn::make('kapasitas'),
-                TextColumn::make('jumlah_pengungsi'),
-                ToggleColumn::make('is_active'),
+                TextColumn::make('alamat')
+                    ->label('Alamat')
+                    ->limit(50),
+                TextColumn::make('kapasitas')
+                    ->label('Kapasitas')
+                    ->numeric()
+                    ->sortable(),
+                TextColumn::make('jumlah_pengungsi')
+                    ->label('Pengungsi')
+                    ->numeric()
+                    ->sortable(),
+                ToggleColumn::make('is_active')
+                    ->label('Aktif'),
             ])
             ->filters([
                 //

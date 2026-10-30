@@ -1,5 +1,5 @@
 <x-app-layout>
-    <section class="border border-neutral-200 bg-white rounded-lg p-5 shadow-xs">
+    <section class="border border-neutral-200 bg-white rounded-2xl p-6 shadow-sm">
       <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div class="space-y-1">
           <div class="flex items-center gap-2">
@@ -13,7 +13,7 @@
     </section>
 
     <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
-      <article class="border border-neutral-200 bg-white rounded-lg p-5 shadow-xs hover:border-red-200 transition-all">
+      <article class="border border-neutral-200 bg-white rounded-2xl p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:border-red-200 hover:shadow-md">
         <div class="flex items-center justify-between">
           <span class="text-xs font-medium text-red-600 uppercase tracking-wider">Pengungsi Posko</span>
           <span class="p-1.5 rounded-md bg-red-50 text-red-600">
@@ -32,7 +32,7 @@
         </div>
       </article>
 
-      <article class="border border-neutral-200 bg-white rounded-lg p-5 shadow-xs hover:border-red-200 transition-all">
+      <article class="border border-neutral-200 bg-white rounded-2xl p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:border-red-200 hover:shadow-md">
         <div class="flex items-center justify-between">
           <span class="text-xs font-medium text-red-600 uppercase tracking-wider">Perlu Verifikasi</span>
           <span class="p-1.5 rounded-md bg-amber-50 text-amber-600">
@@ -45,7 +45,7 @@
         </div>
       </article>
 
-      <article class="border border-neutral-200 bg-white rounded-lg p-5 shadow-xs hover:border-red-200 transition-all">
+      <article class="border border-neutral-200 bg-white rounded-2xl p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:border-red-200 hover:shadow-md">
         <div class="flex items-center justify-between">
           <span class="text-xs font-medium text-red-600 uppercase tracking-wider">Total Laporan</span>
           <span class="p-1.5 rounded-md bg-neutral-100 text-neutral-700">
@@ -58,7 +58,7 @@
         </div>
       </article>
 
-      <article class="border border-neutral-200 bg-white rounded-lg p-5 shadow-xs hover:border-red-200 transition-all">
+      <article class="border border-neutral-200 bg-white rounded-2xl p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:border-red-200 hover:shadow-md">
         <div class="flex items-center justify-between">
           <span class="text-xs font-medium text-red-600 uppercase tracking-wider">Status Logistik</span>
           <span class="p-1.5 rounded-md bg-emerald-50 text-emerald-600">
@@ -74,7 +74,7 @@
 
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start mt-6" x-data="reportModal()">
       
-      <section class="lg:col-span-8 bg-white border border-neutral-200 rounded-lg shadow-xs overflow-hidden">
+      <section class="lg:col-span-12 bg-white border border-neutral-200 rounded-2xl shadow-sm overflow-hidden">
         <div class="p-5 border-b border-neutral-200 space-y-4">
           <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <div>

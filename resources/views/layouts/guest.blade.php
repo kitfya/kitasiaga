@@ -15,23 +15,23 @@
     <!-- Tailwind CSS / Vite -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="font-['Plus_Jakarta_Sans',sans-serif] bg-neutral-100 text-neutral-900 antialiased selection:bg-red-100 selection:text-red-800 min-h-screen flex flex-col justify-center items-center p-4">
+<body class="flex min-h-screen flex-col items-center justify-center bg-neutral-50 p-4 font-['Plus_Jakarta_Sans',sans-serif] text-neutral-900 antialiased selection:bg-red-100 selection:text-red-800">
     <div class="w-full max-w-md">
         <!-- Logo & Header Branding KitaSiaga -->
         <div class="text-center mb-6">
             <a href="/" class="inline-flex items-center gap-3 group focus:outline-none">
-                <div class="w-12 h-12 rounded-lg bg-red-600 flex items-center justify-center text-white shadow-sm group-hover:bg-red-700 transition-colors">
-            <img src="{{ asset('images/logo.webp') }}" alt="logo"/>
+                <div class="flex h-12 w-12 items-center justify-center overflow-hidden rounded-xl bg-brand-red text-white shadow-sm transition-colors group-hover:bg-brand-redHover">
+                    <img src="{{ asset('images/logo.webp') }}" alt="KitaSiaga" class="h-full w-full object-cover"/>
                 </div>
                 <div class="text-left">
                     <span class="text-xl font-bold tracking-tight text-neutral-900 block leading-tight">KitaSiaga</span>
-                    <span class="text-[11px] font-medium text-neutral-500 block uppercase tracking-wider">Portal Relawan Bencana</span>
+                    <span class="block text-[11px] font-semibold uppercase tracking-[0.14em] text-neutral-500">Portal Relawan Bencana</span>
                 </div>
             </a>
         </div>
 
         <!-- Main Card Form -->
-        <div class="bg-white border border-neutral-200 rounded-xl shadow-sm p-6 sm:p-8">
+        <div class="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm sm:p-8">
             {{ $slot }}
         </div>
 

@@ -19,6 +19,35 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
+@layer components {
+    .portal-main > div > section.border-neutral-200,
+    .portal-main article.border-neutral-200,
+    .portal-main form.bg-white.border-neutral-200,
+    .portal-main section.bg-white.border-neutral-200 {
+        border-radius: 1rem;
+        box-shadow:
+            0 1px 2px rgba(23, 23, 23, 0.04),
+            0 8px 24px rgba(23, 23, 23, 0.035);
+    }
+
+    .portal-main input:not([type="checkbox"]):not([type="radio"]),
+    .portal-main select,
+    .portal-main textarea {
+        border-radius: 0.625rem;
+    }
+
+    .portal-main input:focus,
+    .portal-main select:focus,
+    .portal-main textarea:focus {
+        --tw-ring-color: #dc2626;
+        border-color: #dc2626;
+    }
+
+    .portal-main table thead {
+        background-color: #fafafa;
+    }
+}
+
 /* Custom Clean Scrollbar */
 ::-webkit-scrollbar {
     width: 6px;
